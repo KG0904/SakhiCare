@@ -28,7 +28,7 @@ export const signup = createAsyncThunk('auth/signup', async (userData, { rejectW
       return anonUser;
     }
 
-    const res = await API.post('/auth/signup', userData);
+    const res = await API.post('/api/auth/signup', userData);
     localStorage.setItem('token', res.data.data.token);
     return res.data.data;
   } catch (err) {
@@ -37,7 +37,7 @@ export const signup = createAsyncThunk('auth/signup', async (userData, { rejectW
 });
 
 // Login thunk
-export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
+export const login = createAsyncThunk('/api/auth/login', async (credentials, { rejectWithValue }) => {
   try {
     // Anonymous login — restore from localStorage
     if (credentials.isAnonymous) {
