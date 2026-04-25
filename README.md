@@ -4,6 +4,11 @@ A full-stack menstrual health platform to track cycles, predict periods & ovulat
 
 ---
 
+## 🚀 Live Demo
+🌐 **Frontend (Live App):** https://sakhi-care-t1jw.vercel.app  
+⚙️ **Backend API:** https://sakhicare.onrender.com  
+
+---
 ## ✨ Features
 
 * 📅 **Period Prediction** (default 30-day cycle, customizable)
