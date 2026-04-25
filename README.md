@@ -102,10 +102,16 @@ npm start
 
 ## 📸 Screenshots 
 
-* Dashboard
+* Signup page
+* <img width="1107" height="825" alt="image" src="https://github.com/user-attachments/assets/b582b16f-75d1-4366-87f9-7cc901a35a69" />
 * Calendar view
-* Pregnancy mode
+* <img width="1244" height="826" alt="image" src="https://github.com/user-attachments/assets/f3ad8e20-a688-4f35-8054-dab1f4c0546e" />
+* Health Modes
+* <img width="1311" height="820" alt="image" src="https://github.com/user-attachments/assets/a93d9f18-1667-4dcc-a8af-7418dbc92a6f" />
 * Chatbot
+* <img width="1282" height="774" alt="image" src="https://github.com/user-attachments/assets/234c2c46-a8ed-48d7-b1e0-c59158fbcdaf" />
+
+
 
 ---
 
