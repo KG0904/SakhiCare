@@ -1,72 +1,89 @@
-/**
- * store/authSlice.js — Authentication State (Phase 4)
- *
- * Handles signup, login, logout.
- * Supports Anonymous Mode — when enabled, user data is stored
- * locally without hitting the backend.
- */
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import API from '../api';
 
 // --------------- Async Thunks ---------------
 
-// Signup thunk
-export const signup = createAsyncThunk('auth/signup', async (userData, { rejectWithValue }) => {
-  try {
-    // Anonymous mode — skip backend, store locally
-    if (userData.isAnonymous) {
-      const anonUser = {
-        id: 'anon_' + Date.now(),
-        name: userData.name || 'Anonymous',
-        email: userData.email,
-        isAnonymous: true,
-        token: 'anon_token_' + Date.now(),
-      };
-      localStorage.setItem('token', anonUser.token);
-      localStorage.setItem('anonUser', JSON.stringify(anonUser));
-      return anonUser;
-    }
+// ✅ SIGNUP
+export const signup = createAsyncThunk(
+  'auth/signup',
+  async (userData, { rejectWithValue }) => {
+    try {
+      // Anonymous mode — skip backend
+      if (userData.isAnonymous) {
+        const anonUser = {
+          id: 'anon_' + Date.now(),
+          name: userData.name || 'Anonymous',
+          email: userData.email,
+          isAnonymous: true,
+          token: 'anon_token_' + Date.now(),
+        };
 
-    const res = await API.post('/api/auth/signup', userData);
-    localStorage.setItem('token', res.data.data.token);
-    return res.data.data;
-  } catch (err) {
-    return rejectWithValue(err.response?.data?.message || 'Signup failed');
-  }
-});
-
-// Login thunk
-export const login = createAsyncThunk('/api/auth/login', async (credentials, { rejectWithValue }) => {
-  try {
-    // Anonymous login — restore from localStorage
-    if (credentials.isAnonymous) {
-      const stored = localStorage.getItem('anonUser');
-      if (stored) {
-        const anonUser = JSON.parse(stored);
         localStorage.setItem('token', anonUser.token);
+        localStorage.setItem('anonUser', JSON.stringify(anonUser));
+
         return anonUser;
       }
-      return rejectWithValue('No anonymous session found. Please sign up first.');
+
+      // ✅ Correct backend route
+      const res = await API.post('/api/auth/signup', userData);
+
+      localStorage.setItem('token', res.data.data.token);
+      return res.data.data;
+
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || 'Signup failed'
+      );
     }
-
-    const res = await API.post('/auth/login', credentials);
-    localStorage.setItem('token', res.data.data.token);
-    return res.data.data;
-  } catch (err) {
-    return rejectWithValue(err.response?.data?.message || 'Login failed');
   }
-});
+);
 
-// --------------- Slice ---------------
+// ✅ LOGIN
+export const login = createAsyncThunk(
+  'auth/login',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      // Anonymous login
+      if (credentials.isAnonymous) {
+        const stored = localStorage.getItem('anonUser');
 
-// Restore user from localStorage on app load
+        if (stored) {
+          const anonUser = JSON.parse(stored);
+          localStorage.setItem('token', anonUser.token);
+          return anonUser;
+        }
+
+        return rejectWithValue(
+          'No anonymous session found. Please sign up first.'
+        );
+      }
+
+      // ✅ Correct backend route
+      const res = await API.post('/api/auth/login', credentials);
+
+      localStorage.setItem('token', res.data.data.token);
+      return res.data.data;
+
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || 'Login failed'
+      );
+    }
+  }
+);
+
+// --------------- Initial State ---------------
+
 const savedToken = localStorage.getItem('token');
 const savedAnon = localStorage.getItem('anonUser');
+
 let initialUser = null;
+
 if (savedAnon && savedToken?.startsWith('anon_')) {
   initialUser = JSON.parse(savedAnon);
 }
+
+// --------------- Slice ---------------
 
 const authSlice = createSlice({
   name: 'auth',
@@ -83,6 +100,7 @@ const authSlice = createSlice({
       state.token = null;
       state.isAnonymous = false;
       state.error = null;
+
       localStorage.removeItem('token');
       localStorage.removeItem('anonUser');
       localStorage.removeItem('anonCycles');
@@ -94,8 +112,12 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
       // Signup
-      .addCase(signup.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(signup.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(signup.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
@@ -106,8 +128,12 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+
       // Login
-      .addCase(login.pending, (state) => { state.loading = true; state.error = null; })
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
@@ -123,3 +149,4 @@ const authSlice = createSlice({
 
 export const { logout, clearError } = authSlice.actions;
 export default authSlice.reducer;
+
