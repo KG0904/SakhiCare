@@ -25,7 +25,7 @@ export const signup = createAsyncThunk(
       }
 
       // ✅ Correct backend route
-      const res = await API.post('/api/auth/signup', userData);
+      const res = await API.post('/auth/signup', userData);
 
       localStorage.setItem('token', res.data.data.token);
       return res.data.data;
@@ -59,7 +59,7 @@ export const login = createAsyncThunk(
       }
 
       // ✅ Correct backend route
-      const res = await API.post('/api/auth/login', credentials);
+      const res = await API.post('/auth/login', credentials);
 
       localStorage.setItem('token', res.data.data.token);
       return res.data.data;
