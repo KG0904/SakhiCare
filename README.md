@@ -83,7 +83,7 @@ npm start
 
 ---
 
-## 🔗 API Endpoints (sample)
+## 🔗 API Endpoints 
 
 * `POST /auth/signup`
 * `POST /auth/login`
@@ -95,7 +95,7 @@ npm start
 
 ---
 
-## 📸 Screenshots (add later)
+## 📸 Screenshots 
 
 * Dashboard
 * Calendar view
@@ -109,15 +109,6 @@ npm start
 * Supportive & inclusive
 * Privacy-first
 * Simple, educational UX
-
----
-
-## 🚀 Future Improvements
-
-* Notifications & reminders
-* Graphs for cycle trends
-* Advanced AI health assistant
-* Mobile app (React Native)
 
 ---
 
